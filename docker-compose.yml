@@ -23,7 +23,7 @@ services:
   user-service:
     build: ./backend/user-service
     ports:
-      - "8081:8081"
+      - "8082:8082"
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/userdb
       - JWT_SECRET=ChangeThisJWTSecretToASecureValue
@@ -36,7 +36,7 @@ services:
   product-service:
     build: ./backend/product-service
     ports:
-      - "8082:8082"
+      - "8083:8083"
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/productdb
       - JWT_SECRET=ChangeThisJWTSecretToASecureValue
@@ -49,7 +49,7 @@ services:
   media-service:
     build: ./backend/media-service
     ports:
-      - "8083:8083"
+      - "8084:8084"
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/mediadb
       - JWT_SECRET=ChangeThisJWTSecretToASecureValue
@@ -68,7 +68,7 @@ services:
   order-service:
     build: ./backend/order-service
     ports:
-      - "8084:8084"
+      - "8085:8085"
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/orderdb
       - JWT_SECRET=ChangeThisJWTSecretToASecureValue

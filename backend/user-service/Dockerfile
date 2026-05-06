@@ -12,5 +12,5 @@ WORKDIR /app
 
 COPY --from=build --chown=appuser:appgroup /app/target/*.jar ./app.jar
 USER appuser
-EXPOSE 8081
+EXPOSE 8082
 ENTRYPOINT ["java","-jar","/app/app.jar"]

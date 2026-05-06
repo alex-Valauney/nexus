@@ -21,5 +21,5 @@ COPY --from=build --chown=appuser:appgroup /app/target/*.jar ./app.jar
 # On change le user : plus aucune commande ne sera exécutée en root, mais en appuser
 USER appuser
 
-EXPOSE 8083
+EXPOSE 8084
 ENTRYPOINT ["java","-jar","/app/app.jar"]
