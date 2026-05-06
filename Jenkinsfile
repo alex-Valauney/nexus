@@ -37,21 +37,30 @@ pipeline {
         // }
 
         stage('Tests') {
-    agent {
-        docker { 
-            image 'maven:3.9-eclipse-temurin-17'
-            // On lance un container mongo lié au build
-            args '--link my-mongo-db:mongodb' 
+            agent {
+                docker { 
+                    image 'maven:3.9-eclipse-temurin-17'
+                    // On lance un container mongo lié au build
+                    args '--link my-mongo-db:mongodb' 
+                }
+            }
+            steps {
+                dir("${env.SERVICE_PATH}") {
+                    // On définit l'URL de la DB pour les tests
+                    sh 'mvn test -Dspring.data.mongodb.uri=mongodb://mongodb:27017/testdb'
+                }
+            }
         }
-    }
-    steps {
-        dir("${env.SERVICE_PATH}") {
-            // On définit l'URL de la DB pour les tests
-            sh 'mvn test -Dspring.data.mongodb.uri=mongodb://mongodb:27017/testdb'
-        }
-    }
-}
 
+        stage('Build & Test') {
+            steps {
+                // On se déplace dans le sous-dossier avant de lancer Maven
+                dir("${env.SERVICE_PATH}") {
+                    echo "Compilation et Tests de user-service..."
+                    sh 'mvn clean test'
+                }
+            }
+        }
 
         stage('Publication Nexus') {
             steps {
