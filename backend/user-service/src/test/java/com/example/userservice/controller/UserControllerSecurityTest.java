@@ -16,11 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Map;
 import java.util.UUID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@AutoConfigureDataMongo
 class UserControllerSecurityTest {
 
     @Autowired
