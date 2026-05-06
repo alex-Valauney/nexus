@@ -16,7 +16,7 @@ pipeline {
         MVN_OPTS = '-B'
         HOME = '/tmp/jenkins-home'
 
-        DOCKER_REGISTRY = '172.18.162.130:5001'
+        DOCKER_REGISTRY = 'host.docker.internal:5001'
         NEXUS_CREDS_ID = 'nexus-creds'
         VERSION = "1.2.${env.BUILD_NUMBER}"
     }
