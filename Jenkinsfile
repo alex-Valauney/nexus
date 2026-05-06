@@ -37,30 +37,32 @@ pipeline {
         // }
 
         stage('Tests') {
-            agent {
-                docker { 
-                    image 'maven:3.9-eclipse-temurin-17'
-                    // On lance un container mongo lié au build
-                    args '--link my-mongo-db:mongodb' 
-                }
-            }
             steps {
                 dir("${env.SERVICE_PATH}") {
-                    // On définit l'URL de la DB pour les tests
-                    sh 'mvn test -Dspring.data.mongodb.uri=mongodb://mongodb:27017/testdb'
+                    script {
+                        // Le plugin gère le docker run et le docker stop/rm automatiquement
+                        docker.image('mongo:latest').withRun('-p 27017:27017') { c ->
+                            echo "MongoDB est démarré dans le container ${c.id}"    
+                            // On attend que Mongo soit prêt (optionnel mais recommandé)
+                            sh 'sleep 5' 
+                            
+                            // Exécution de Maven
+                            sh 'mvn test -Dspring.data.mongodb.uri=mongodb://localhost:27017/testdb'
+                        }
+                    }
                 }
             }
         }
 
-        stage('Build & Test') {
-            steps {
-                // On se déplace dans le sous-dossier avant de lancer Maven
-                dir("${env.SERVICE_PATH}") {
-                    echo "Compilation et Tests de user-service..."
-                    sh 'mvn clean test'
-                }
-            }
-        }
+        // stage('Build & Test') {
+        //     steps {
+        //         // On se déplace dans le sous-dossier avant de lancer Maven
+        //         dir("${env.SERVICE_PATH}") {
+        //             echo "Compilation et Tests de user-service..."
+        //             sh 'mvn clean test'
+        //         }
+        //     }
+        // }
 
         stage('Publication Nexus') {
             steps {
