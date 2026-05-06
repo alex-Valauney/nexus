@@ -50,16 +50,21 @@ pipeline {
         }
 
         stage('Publication Nexus') {
-            steps {
-                dir("${env.SERVICE_PATH}") {
-                    echo "Envoi de l'artefact vers Nexus..."
-                    // Utilisation des credentials pour s'authentifier
-                    withCredentials([usernamePassword(credentialsId: 'nexus-auth', passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')]) {
-                        sh 'mvn deploy -DskipTests'
-                    }
-                }
+    steps {
+        dir("${env.SERVICE_PATH}") {
+            echo "Envoi de l'artefact vers Nexus..."
+            withCredentials([usernamePassword(credentialsId: 'nexus-auth', passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')]) {
+                // On injecte les credentials directement dans la commande Maven
+                sh """
+                mvn deploy -DskipTests \
+                -DrepositoryId=nexus-snapshots \
+                -Dusername=${NEXUS_USER} \
+                -Dpassword=${NEXUS_PASS}
+                """
             }
         }
+    }
+}
     }
 
     post {
