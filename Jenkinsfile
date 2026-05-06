@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'MAVEN' // Le nom que tu as donné dans la config
+    }
+
     options {
         // Évite de remplir le disque avec 1000 builds
         buildDiscarder(logRotator(numToKeepStr: '10'))
@@ -47,7 +51,7 @@ pipeline {
                 dir("${env.SERVICE_PATH}") {
                     echo "Envoi de l'artefact vers Nexus..."
                     // Utilisation des credentials pour s'authentifier
-                    withCredentials([usernamePassword(credentialsId: 'nexus-auth', passwordVariable: 'NEXUS_PWD', usernameVariable: 'NEXUS_USR')]) {
+                    withCredentials([usernamePassword(credentialsId: 'nexus-auth', passwordVariable: 'NEXUS_PASS', usernameVariable: 'NEXUS_USER')]) {
                         sh 'mvn deploy -DskipTests'
                     }
                 }
