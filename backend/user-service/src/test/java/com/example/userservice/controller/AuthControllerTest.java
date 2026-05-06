@@ -17,11 +17,9 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import jakarta.servlet.http.Cookie;
-import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@AutoConfigureDataMongo
 class UserControllerTest {
 
     @Autowired
