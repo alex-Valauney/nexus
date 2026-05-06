@@ -15,7 +15,7 @@ pipeline {
         HOME = '/tmp/jenkins-home'
 
         DOCKER_REGISTRY = 'host.docker.internal:5001'
-        NEXUS_CREDS_ID = 'nexus-creds'
+        credentialsId: 'nexus-creds'
         VERSION = "1.2.${env.BUILD_NUMBER}"
     }
 
@@ -27,10 +27,10 @@ pipeline {
         }
 
         stage('Debug creds') {
-  steps {
-    sh 'env | sort'
-  }
-}
+            steps {
+            sh 'env | sort'
+            }
+        }
 
         stage('BACKEND - Build, Test & Publish') {
                     steps {
