@@ -2,16 +2,10 @@ pipeline {
     agent any
 
     tools {
-        maven 'MAVEN' // Le nom que tu as donné dans la config
-    }
-
-    options {
-        // Évite de remplir le disque avec 1000 builds
-        buildDiscarder(logRotator(numToKeepStr: '10'))
+        maven 'MAVEN'
     }
 
     triggers {
-        // Trigger via Webhook recommandé (GitHub/GitLab)
         pollSCM('* * * * *')
     }
 
