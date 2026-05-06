@@ -21,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataM
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureDataMongo
 class UserControllerTest {
 
     @Autowired
