@@ -42,7 +42,9 @@ pipeline {
                 // On se déplace dans le sous-dossier avant de lancer Maven
                 dir("${env.SERVICE_PATH}") {
                     echo "Compilation et Tests de user-service..."
-                    sh 'mvn clean test -U'
+                    // Le flag -Dsurefire.showSuccess=false permet de voir surtout les erreurs
+                    sh 'mvn clean test -Dspring.data.mongodb.uri='
+                    // sh 'mvn clean test -U'
                 }
             }
         }
