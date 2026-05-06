@@ -10,8 +10,6 @@ pipeline {
         jdk 'JDK17'
     }
 
-// com
-
     environment {
         MVN_OPTS = '-B'
         HOME = '/tmp/jenkins-home'
