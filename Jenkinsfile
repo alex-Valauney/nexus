@@ -63,7 +63,7 @@ pipeline {
 
     post {
         always {
-            cleanWs() // Nettoie l'espace de travail après le build
+            echo "Build terminé avec succès"
         }
     }
 }
