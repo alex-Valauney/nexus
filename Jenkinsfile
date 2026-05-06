@@ -26,6 +26,12 @@ pipeline {
             }
         }
 
+        stage('Debug creds') {
+  steps {
+    sh 'env | sort'
+  }
+}
+
         stage('BACKEND - Build, Test & Publish') {
                     steps {
                         script {
