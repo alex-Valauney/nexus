@@ -1,0 +1,90 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - buy-net
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - buy-net
+
+  user-service:
+    build: ./backend/user-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/userdb
+      - JWT_SECRET=ChangeThisJWTSecretToASecureValue
+      - INTERNAL_TOKEN=ChangeThisInternalToken
+    depends_on:
+      - mongo
+    networks:
+      - buy-net
+
+  product-service:
+    build: ./backend/product-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/productdb
+      - JWT_SECRET=ChangeThisJWTSecretToASecureValue
+      - INTERNAL_TOKEN=ChangeThisInternalToken
+    depends_on:
+      - mongo
+    networks:
+      - buy-net
+
+  media-service:
+    build: ./backend/media-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/mediadb
+      - JWT_SECRET=ChangeThisJWTSecretToASecureValue
+      - INTERNAL_TOKEN=ChangeThisInternalToken
+      - PRODUCT_SERVICE_URL=http://product-service:8082
+    depends_on:
+      - mongo
+      - product-service
+    networks:
+      - buy-net
+    volumes:
+      # persist uploaded media files on the host so they survive container rebuilds
+      # - ./backend/media-service/uploads:/app/uploads
+      - media-uploads:/app/uploads
+
+  order-service:
+    build: ./backend/order-service
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/orderdb
+      - JWT_SECRET=ChangeThisJWTSecretToASecureValue
+      - INTERNAL_TOKEN=ChangeThisInternalToken
+    depends_on:
+      - mongo
+      - product-service
+      - user-service
+    networks:
+      - buy-net
+
+
+volumes:
+  mongo-data:
+  media-uploads:
+
+networks:
+  buy-net:
+    driver: bridge

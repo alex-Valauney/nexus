@@ -1,0 +1,89 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Parent coordinates for the whole backend multi-module project -->
+    <groupId>com.example</groupId>
+    <artifactId>buy01-safe-zone</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>buy01-safe-zone</name>
+    <description>Multi-module backend (media, product, user) for Safe Zone</description>
+
+    <!-- Centralized properties shared by all modules -->
+    <properties>
+        <java.version>17</java.version>
+        <spring-boot.version>3.1.4</spring-boot.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <sonar.projectKey>Buy-02</sonar.projectKey>
+        <sonar.projectName>Buy-02</sonar.projectName>
+        <sonar.aggregate>true</sonar.aggregate>
+        <sonar.sources>src/main/java,${project.basedir}/frontend/src</sonar.sources>
+        <sonar.tests>src/test/java,${project.basedir}/frontend/src</sonar.tests>
+        <sonar.test.inclusions>**/*.spec.ts,**/*Test.java</sonar.test.inclusions>
+        <sonar.javascript.lcov.reportPaths>${project.basedir}/frontend/coverage/lcov.info</sonar.javascript.lcov.reportPaths>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    </properties>
+
+    <!-- Dependency management: import Spring Boot BOM once -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>backend/media-service</module>
+        <module>backend/product-service</module>
+        <module>backend/user-service</module>
+        <module>backend/order-service</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Make sure all modules use the same Spring Boot plugin -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                </plugin>
+                <!-- JaCoCo for code coverage -->
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.11</version>
+                    <executions>
+                        <execution>
+                            <id>prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
+
